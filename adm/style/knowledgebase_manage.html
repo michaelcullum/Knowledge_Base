@@ -1,0 +1,86 @@
+<!-- INCLUDE overall_header.html -->
+
+<h1>{L_MANAGE_CATEGORIES}</h1>
+
+<!-- IF S_CATEGORY_EDIT -->
+	<form method="post" action="{U_EDIT_CATEGORY}">
+		<fieldset>
+
+			<legend>{L_EDIT_CATEGORY}</legend>
+
+			<dl>
+				<dt><label for="category_name">{L_CATEGORY}:</label></dt>
+				<dd><input name="category_name" id="category_name" type="text" value="{CATEGORY_NAME}" /></dd>
+			</dl>
+
+			<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />
+			{S_FORM_TOKEN}
+		</fieldset>
+	</form>
+<!-- ELSEIF S_CATEGORY_DELETE -->
+	<form method="post" action="{U_DELETE_CATEGORY}">
+		<fieldset>
+
+			<legend>{L_DELETE_CATEGORY}</legend>
+
+			<dl>
+				<dt><label for="delete_articles">{L_ACTION}:</label></dt>
+				<dd><label><input type="radio" class="radio" name="delete_articles" id="delete_articles" value="1" checked="checked" /> {L_DELETE_ALL_ARTICLES}</label></dd>
+				<dd>
+					<label><input type="radio" class="radio" name="delete_articles" id="delete_articles" value="0" /> {L_MOVE_ARTICLES_TO}</label>
+					<select name="move_to_category" id="move_to_category">
+					<!-- BEGIN categories -->
+						<!-- IF DELETE_CATEGORY_ID != categories.CATEGORY_ID --><option value="{categories.CATEGORY_ID}">{categories.CATEGORY_NAME}</option><!-- ENDIF -->
+					<!-- END categories -->
+					</select>
+				</dd>
+			</dl>
+
+			<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />
+			{S_FORM_TOKEN}
+		</fieldset>
+	</form>
+<!-- ELSE -->
+	<!-- IF .categories -->
+		<table cellspacing="1">
+			<col class="row1" /><col class="row1" /><col class="row2" />
+		<tbody>
+		<!-- BEGIN categories -->
+			<tr>
+				<td>
+					<strong>{categories.CATEGORY_NAME}</strong>
+				</td>
+				<td style="vertical-align: top; width: 100px; text-align: right; white-space: nowrap;">
+					<!-- IF categories.S_FIRST_ROW && not categories.S_LAST_ROW -->
+						{ICON_MOVE_UP_DISABLED}
+						<a href="{categories.U_MOVE_DOWN}">{ICON_MOVE_DOWN}</a>
+					<!-- ELSEIF not categories.S_FIRST_ROW && not categories.S_LAST_ROW -->
+						<a href="{categories.U_MOVE_UP}">{ICON_MOVE_UP}</a>
+						<a href="{categories.U_MOVE_DOWN}">{ICON_MOVE_DOWN}</a>
+					<!-- ELSEIF categories.S_LAST_ROW && not categories.S_FIRST_ROW -->
+						<a href="{categories.U_MOVE_UP}">{ICON_MOVE_UP}</a>
+						{ICON_MOVE_DOWN_DISABLED}
+					<!-- ELSE -->
+						{ICON_MOVE_UP_DISABLED}
+						{ICON_MOVE_DOWN_DISABLED}
+					<!-- ENDIF -->
+					<a href="{categories.U_EDIT}">{ICON_EDIT}</a>
+					<a href="{categories.U_DELETE}">{ICON_DELETE}</a>
+				</td>
+			</tr>
+		<!-- END categories -->
+		</tbody>
+		</table>
+	<!-- ENDIF -->
+
+	<form method="post" action="{U_ADD_CATEGORY}">
+		<fieldset class="quick">
+
+			<input name="category_name" id="category_name" type="text" />
+			<input class="button2" type="submit" id="submit" name="submit" value="{L_CREATE_CATEGORY}" />
+			{S_FORM_TOKEN}
+		</fieldset>
+	</form>
+<!-- ENDIF -->
+
+<!-- INCLUDE overall_footer.html -->

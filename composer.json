@@ -1,0 +1,26 @@
+{
+	"name": "tmbackoff/knowledgebase",
+	"type": "phpbb-extension",
+	"description": "An extension for phpBB 3.1.x which allows an administrator to integrate a Knowledge Base system.",
+	"homepage": "http://www.tmbackoff.com",
+	"version": "1.0.0-dev",
+	"keywords": ["phpbb", "extension", "knowledgebase"],
+	"license": "GPL-2.0",
+	"authors": [
+		{
+			"name": "Tabitha Backoff",
+			"username": "tmbackoff",
+			"email": "tmbackoff@yahoo.com",
+			"role": "Extension Developer"
+		}
+	],
+	"require": {
+		"php": ">=5.3.3"
+	},
+	"extra": {
+		"display-name": "Knowledge Base",
+		"soft-require": {
+			"phpbb/phpbb": "3.1.*@dev"
+		}
+	}
+}

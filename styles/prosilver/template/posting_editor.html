@@ -1,0 +1,52 @@
+<fieldset class="fields1">
+	<!-- IF ERROR --><p class="error">{ERROR}</p><!-- ENDIF -->
+
+	<dl style="clear: left;">
+		<dt><label for="article_title">{L_TITLE}:</label></dt>
+		<dd><input type="text" name="article_title" id="article_title" size="45" maxlength="60" tabindex="2" value="{ARTICLE_TITLE}" class="inputbox autowidth" /></dd>
+	</dl>
+
+	<dl style="clear: left;">
+		<dt><label for="article_description">{L_DESCRIPTION}:</label></dt>
+		<dd><input type="text" name="article_description" id="article_description" size="45" maxlength="200" tabindex="2" value="{ARTICLE_DESCRIPTION}" class="inputbox autowidth" /></dd>
+	</dl>
+
+	<dl style="clear: left;">
+		<dt><label for="categories"><strong>{L_CATEGORY}:</strong></label></dt>
+		<dd>
+			<select name="category_id" id="category_id">
+			<!-- IF .categories --><option value="">{L_SELECT_CATEGORY}</option><!-- ENDIF -->
+			<!-- BEGIN categories -->
+				<option value="{categories.CATEGORY_ID}"{categories.SELECTED}>{categories.CATEGORY_NAME}</option>
+			<!-- BEGINELSE -->
+				<option selected="selected">{L_NO_CATEGORIES}</option>
+			<!-- END categories -->
+			</select>
+		</dd>
+	</dl>
+
+	<!-- INCLUDE posting_buttons.html -->
+
+	<div id="smiley-box">
+			<strong>{L_SMILIES}</strong><br />
+			<!-- BEGIN smiley -->
+				<a href="#" onclick="insert_text('{smiley.A_SMILEY_CODE}', true); return false;"><img src="{smiley.SMILEY_IMG}" width="{smiley.SMILEY_WIDTH}" height="{smiley.SMILEY_HEIGHT}" alt="{smiley.SMILEY_CODE}" title="{smiley.SMILEY_DESC}" /></a>
+			<!-- END smiley -->
+			<br /><a href="{U_MORE_SMILIES}" onclick="popup(this.href, 300, 350, '_phpbbsmilies'); return false;">{L_MORE_SMILIES}</a>
+	</div>
+
+	<div id="message-box">
+		<textarea name="message" id="message" rows="15" cols="76" tabindex="4" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" onfocus="initInsertions();" class="inputbox">{MESSAGE}</textarea>
+	</div>
+</fieldset>
+
+		<span class="corners-bottom"><span></span></span></div>
+	</div>
+
+	<div class="panel bg2">
+		<div class="inner"><span class="corners-top"><span></span></span>
+		<fieldset class="submit-buttons">
+			<input type="submit" tabindex="5" name="cancel" value="{L_CANCEL}" class="button1" />&nbsp;
+			<input type="submit" tabindex="5" name="preview" value="{L_PREVIEW}" class="button1" />&nbsp;
+			<input type="submit" accesskey="s" tabindex="6" name="post" value="{L_SUBMIT}" class="button1" />&nbsp;
+		</fieldset>

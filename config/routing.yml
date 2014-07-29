@@ -1,0 +1,3 @@
+knowledgebase_main_controller:
+    pattern: /kb/{name}
+    defaults: { _controller: tmbackoff.knowledgebase.main.controller:display }

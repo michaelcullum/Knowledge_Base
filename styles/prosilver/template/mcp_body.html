@@ -1,0 +1,30 @@
+<!-- INCLUDE overall_header.html -->
+
+<form id="postform" method="post" action="{S_POST_ACTION}">
+
+<div class="panel" id="postingbox">
+	<div class="inner"><span class="corners-top"><span></span></span>
+
+		<fieldset class="fields1">
+			<dl class="fields2 nobg">
+				<dt><label for="notes">{L_MORE_INFO}:</label><br /><span>{L_CAN_LEAVE_BLANK}</span></dt>
+				<dd><textarea class="inputbox" name="notes" id="notes" rows="4" cols="40">{NOTES}</textarea></dd>
+			</dl>
+		</fieldset>
+
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+
+<div class="panel bg2">
+	<div class="inner"><span class="corners-top"><span></span></span>
+	<fieldset class="submit-buttons">
+		<input type="submit" tabindex="5" name="cancel" value="{L_CANCEL}" class="button1" />&nbsp;
+		<input type="submit" accesskey="s" tabindex="6" name="submit" value="{L_SUBMIT}" class="button1" />&nbsp;
+	</fieldset>
+	{S_FORM_TOKEN}
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+
+</form>
+
+<!-- INCLUDE overall_footer.html -->

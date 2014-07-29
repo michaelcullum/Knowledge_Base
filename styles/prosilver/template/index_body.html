@@ -1,0 +1,83 @@
+<!-- INCLUDE overall_header.html -->
+
+<h2 class="kb-header">{L_KNOWLEDGE_BASE}</h2>
+<p class="kb-explain">{L_KNOWLEDGE_BASE_EXPLAIN}</p>
+
+<div class="action-bar top">
+	<div class="buttons">
+	<!-- IF not S_IS_BOT and U_POST_NEW_ARTICLE -->
+		<a href="{U_POST_NEW_ARTICLE}" class="button icon-button post-icon" title="{L_POST_ARTICLE}">
+			{L_BUTTON_NEW_ARTICLE}
+		</a>
+	<!-- ENDIF -->
+	</div>
+
+	<div class="dropdown-container dropdown-button-control topic-tools">
+		<span title="{L_TYPE}" class="button dropdown-trigger dropdown-select">
+			{L_TYPE}
+		</span>
+		<div class="dropdown hidden">
+			<div class="pointer"><div class="pointer-inner"></div></div>
+			<ul class="dropdown-contents">
+			<!-- BEGIN types -->
+				<li><a href="{types.U_TYPE}">{types.TYPE}</a></li>
+			<!-- END types -->
+			</ul>
+		</div>
+	</div>
+
+<!-- IF S_TYPE == 'approved' -->
+	<div class="dropdown-container dropdown-container-{S_CONTENT_FLOW_BEGIN} dropdown-{S_CONTENT_FLOW_END} dropdown-button-control">
+		<span title="{L_CATEGORY}" class="button dropdown-trigger dropdown-select">
+			{L_CATEGORY}
+		</span>
+		<div class="dropdown hidden">
+			<div class="pointer"><div class="pointer-inner"></div></div>
+			<ul class="dropdown-contents">
+				<li><a href="{U_ALL_CATEGORIES}">{L_ALL_CATEGORIES}</a></li>
+			<!-- BEGIN categories -->
+				<!-- IF categories.CATEGORY_ID neq -1 -->
+					<li><a href="{categories.U_CATEGORY}">{categories.CATEGORY_NAME}</a></li>
+				<!-- ENDIF -->
+			<!-- END categories -->
+			</ul>
+		</div>
+	</div>
+<!-- ENDIF -->
+</div>
+
+
+<!-- IF .article_row -->
+<div class="forumbg">
+	<div class="inner">
+		<ul class="topiclist">
+			<li class="header">
+				<dl class="icon">
+					<dt><div class="list-inner">{L_ARTICLES}</div></dt>
+					<dd class="category">{L_CATEGORY}</dd>
+					<dd class="lastpost"><span></span></dd>
+				</dl>
+			</li>
+		</ul>
+		<!-- BEGIN article_row -->
+		<ul class="topiclist topics">
+			<li class="row<!-- IF article_row.S_ROW_COUNT is even --> bg1<!-- ELSE --> bg2<!-- ENDIF -->">
+				<dl class="kb">
+					<dt><div class="list-inner"><a href="{article_row.U_VIEW_ARTICLE}" class="topictitle">{article_row.ARTICLE_TITLE}</a><br />{article_row.ARTICLE_DESCRIPTION}</div></dt>
+					<dd class="category">{article_row.ARTICLE_CATEGORY}</dd>
+					<dd class="lastpost"><span><dfn>{L_LAST_POST} </dfn>{L_POST_BY_AUTHOR} {article_row.ARTICLE_POSTER}<br />{article_row.ARTICLE_TIME}</span></dd>
+				</dl>
+			</li>
+		</ul>
+		<!-- END article_row -->
+	</div>
+</div>
+<!-- ELSE -->
+<div class="panel">
+	<div class="inner">
+	<strong>{L_NO_ARTICLES}</strong>
+	</div>
+</div>
+<!-- ENDIF -->
+
+<!-- INCLUDE overall_footer.html -->

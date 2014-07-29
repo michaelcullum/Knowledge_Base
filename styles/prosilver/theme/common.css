@@ -1,0 +1,73 @@
+.icon-kb {
+	background-position: 0 50%;
+	background-repeat: no-repeat;
+	padding: 1px 0 0 17px;
+	background-image: url("./images/icon_kb.gif");
+}
+
+.kb-header {
+	color: #4f84ad;
+	font-size: 2.8em;
+	font-weight: 900;
+	font-family: "Helvetica", Arial, sans-serif;
+}
+
+.kb-explain {
+	font-size: 1.2em;
+	font-family: "Lucida Grande", Verdana, Helvetica, Arial, sans-serif;
+	margin-bottom: 1em;
+}
+
+fieldset.selector {
+	text-align: left;
+	min-height: 2.5em;
+}
+
+fieldset.selector select {
+	max-width: 50%;
+}
+
+dd.category {
+	width: 160px;
+	text-align: center;
+	line-height: 2.2em;
+	font-size: 1.2em;
+}
+
+dl.kb dt .list-inner {
+	padding-left: 5px;
+}
+
+.kb-icons {
+	height: 14px;
+	font-weight: bold;
+	font-size: 11px;
+}
+
+.kb-postbody {
+	color: #333333;
+}
+
+.kb-postbody {
+	padding: 0;
+	line-height: 1.48em;
+	width: 100%;
+	float: left;
+}
+
+.kb-postbody h3 {
+	/* Postbody requires a different h3 format - so change it here */
+	float: left;
+	font-size: 1.5em;
+	padding: 2px 0 0 0;
+	margin: 0 0 0.3em 0 !important;
+	text-transform: none;
+	border: none;
+	font-family: "Trebuchet MS", Verdana, Helvetica, Arial, sans-serif;
+	line-height: 125%;
+}
+
+.kb-postbody .content {
+	font-size: 1.3em;
+	overflow-x: auto;
+}
