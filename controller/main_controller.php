@@ -116,6 +116,7 @@ class main_controller
 				$category_id = $this->request->variable('c', 'all');
 				$type = $this->request->variable('type', 'approved');
 
+				// Generate the category list
 				$sql = 'SELECT *
 					FROM ' . $this->categories_table . '
 					ORDER BY left_id ASC';
@@ -139,6 +140,7 @@ class main_controller
 					return $this->helper->error($this->user->lang('NO_CATEGORY'));
 				}
 
+				// Generate the type list
 				$type_array = array('approved', 'disapproved', 'denied');
 				foreach ($type_array as $key)
 				{
@@ -179,6 +181,7 @@ class main_controller
 
 				$sql_where .= ($category_id != 'all') ? ' AND a.category_id = ' . (int) $category_id : '';
 
+				// Get a list of all the articles for the current type and/or category
 				$sql = 'SELECT a.*, c.*, u.user_id, u.user_colour, u.username
 					FROM ' . $this->articles_table . ' a, ' . $this->categories_table . ' c, ' . USERS_TABLE . " u
 					WHERE u.user_id = a.article_poster
@@ -199,7 +202,22 @@ class main_controller
 				}
 				$this->db->sql_freeresult($result);
 
+				// Grab the name of the currently selected category
+				$sql = 'SELECT category_name
+					FROM ' . $this->categories_table . '
+					WHERE category_id = ' . (int) $category_id;
+				$result = $this->db->sql_query_limit($sql, 1);
+				while ($row = $this->db->sql_fetchrow($result))
+				{
+					$category_name = $row['category_name'];
+				}
+				$this->db->sql_freeresult($result);
+
+				// OK, assign all the necessary template vars not already assigned...
 				$this->template->assign_vars(array(
+					'CATEGORY'	=> $category_id == 'all' ? $this->user->lang('ALL_CATEGORIES') : $category_name,
+					'TYPE'		=> ucfirst($type),
+
 					'S_TYPE'	=> $type,
 
 					'U_ALL_CATEGORIES'		=> $this->helper->route('knowledgebase_main_controller', array('name' => 'index')),
@@ -216,6 +234,7 @@ class main_controller
 				$submit = ($this->request->is_set_post('submit')) ? true : false;
 				$cancel = ($this->request->is_set_post('cancel')) ? true : false;
 
+				// Do we have an article or mode?
 				if (!$article_id)
 				{
 					return $this->helper->error($this->user->lang('NO_ARTICLE'));
@@ -238,6 +257,7 @@ class main_controller
 					return $this->helper->error($this->user->lang('NO_ARTICLE'));
 				}
 
+				// Was cancel pressed? If so, redirect back to where we were (the article)
 				if ($cancel)
 				{
 					$meta_info = $this->helper->route('knowledgebase_main_controller', array('name' => 'viewarticle', 'a' => (int) $article_id));
@@ -373,12 +393,14 @@ class main_controller
 
 				$this->user->add_lang(array('posting'));
 
+				// Was cancel pressed? If so, redirect back to where we were
 				if ($cancel)
 				{
 					$meta_info = ($article_id) ? $this->helper->route('knowledgebase_main_controller', array('name' => 'viewarticle', 'a' => (int) $article_id)) : $this->helper->route('knowledgebase_main_controller', array('name' => 'index'));
 					redirect($meta_info);
 				}
 
+				// No mode?
 				if (!in_array($mode, array('post', 'edit', 'delete')))
 				{
 					return $this->helper->error($this->user->lang('NO_POST_MODE'));
@@ -418,6 +440,7 @@ class main_controller
 					return $this->helper->error($this->user->lang('NO_ARTICLE'));
 				}
 
+				// Authorised?
 				switch ($mode)
 				{
 					case 'post':
@@ -442,6 +465,7 @@ class main_controller
 					break;
 				}
 
+				// Handle delete mode
 				if ($mode == 'delete')
 				{
 					if (confirm_box(true))
@@ -489,6 +513,7 @@ class main_controller
 
 				if ($submit)
 				{
+					// Check posting vars
 					if (utf8_clean_string($title) === '')
 					{
 						$error[] .= $this->user->lang['EMPTY_TITLE'];
@@ -519,8 +544,8 @@ class main_controller
 							'article_description'	=> $description,
 							'article_poster'		=> ($mode == 'edit') ? $data['article_poster'] : $this->user->data['user_id'],
 							'article_time'			=> ($mode == 'edit') ? $data['article_time'] : $current_time,
-							'article_approved'		=> 0,
-							'article_denied'		=> 0,
+							'article_approved'		=> 0, // Always set to disapproved
+							'article_denied'		=> 0, // If this article was denied and changes were made, set to not denied 
 							'enable_bbcode'			=> $allow_bbcode,
 							'enable_smilies'		=> $allow_smilies,
 							'enable_magic_url'		=> $allow_urls,
@@ -557,6 +582,7 @@ class main_controller
 					}
 				}
 
+				// Generate the category list
 				$sql = 'SELECT *
 					FROM ' . $this->categories_table . '
 					ORDER BY left_id ASC';
@@ -574,6 +600,7 @@ class main_controller
 				}
 				$this->db->sql_freeresult($result);
 
+				// OK, assign all the necessary template vars not already assigned...
 				$this->template->assign_vars(array(
 					'ARTICLE_TITLE'			=> $title,
 					'ARTICLE_DESCRIPTION'	=> $description,
@@ -596,6 +623,7 @@ class main_controller
 			case 'viewarticle':
 				$article_id = $this->request->variable('a', 0);
 
+				// Do we have an article
 				if (!$article_id)
 				{
 					return $this->helper->error($this->user->lang('NO_ARTICLE'));
@@ -626,6 +654,7 @@ class main_controller
 
 				$board_url = generate_board_url();
 
+				// OK, assign all the necessary template vars not already assigned...
 				$this->template->assign_vars(array(
 					'ARTICLE_TITLE'			=> $row['article_title'],
 					'ARTICLE_DESCRIPTION'	=> $row['article_description'],
