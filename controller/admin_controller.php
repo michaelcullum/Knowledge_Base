@@ -211,29 +211,106 @@ class admin_controller
 		));
 	}
 
+	/**
+	* Delete a category
+	*
+	* @param int $category_id The category identifier to delete
+	*
+	* @return null
+	* @access public
+	*/
+	public function delete_category($category_id)
+	{
+		if (!$category_id)
+		{
+			trigger_error($this->user->lang['NO_CATEGORY'] . adm_back_link($this->u_action));
+		}
 
+		$sql = 'SELECT COUNT(article_id) as articles
+			FROM ' . $this->articles_table . '
+			WHERE category_id = ' . (int) $category_id;
+		$this->db->sql_query($sql);
+		$articles = $this->db->sql_fetchfield('articles');
 
+		$sql = 'SELECT *
+			FROM ' . $this->categories_table . '
+			WHERE category_id = ' . (int) $category_id;
+		$result = $this->db->sql_query($sql);
+		$row = $this->db->sql_fetchrow($result);
+		$this->db->sql_freeresult($result);
 
+		if (!$row)
+		{
+			trigger_error("Category #$category_id does not exist", E_USER_ERROR);
+		}
 
+		if ($articles == 0)
+		{
+			if (confirm_box(true))
+			{
+				$sql = 'DELETE FROM ' . $this->categories_table . '
+					WHERE category_id = ' . (int) $category_id;
+				$this->db->sql_query($sql);
 
+				add_log('admin', 'LOG_CATEGORY_DELETE', $row['category_name']);
 
+				trigger_error($this->user->lang['CATEGORY_DELETED'] . adm_back_link($this->u_action));
+			}
+			else
+			{
+				confirm_box(false, sprintf($this->user->lang['CATEGORY_CONFIRM'], strtolower($this->user->lang['DELETE'])));
+			}
+		}
+		else
+		{
+			$delete_articles = $this->request->variable('delete_articles', 0);
+			$move_to_category = $this->request->variable('move_to_category', 0);
 
+			if ($this->request->is_set_post('submit'))
+			{
+				if ($delete_articles || !$move_to_category)
+				{
+					$sql = 'SELECT article_id
+						FROM ' . $this->articles_table . '
+						WHERE category_id = ' . (int) $category_id;
+					$result = $this->db->sql_query($sql);
+					while ($row = $this->db->sql_fetchrow($result))
+					{
+						$sql = 'DELETE FROM ' . $this->articles_table . '
+							WHERE article_id = ' . $row['article_id'];
+						$this->db->sql_query($sql);
+					}
 
+					$sql = 'DELETE FROM ' . $this->categories_table . '
+						WHERE category_id = ' . (int) $category_id;
+					$this->db->sql_query($sql);
+				}
+				else if ($move_to_category)
+				{
+					$sql = 'UPDATE  ' . $this->articles_table . '
+						SET category_id = ' . $move_to_category . '
+						WHERE category_id = ' . (int) $category_id;
+					$this->db->sql_query($sql);
 
+					$sql = 'DELETE FROM ' . $this->categories_table . '
+						WHERE category_id = ' . (int) $category_id;
+					$this->db->sql_query($sql);
+				}
 
+				add_log('admin', 'LOG_CATEGORY_DELETE', $row['category_name']);
 
+				trigger_error($this->user->lang['CATEGORY_DELETED'] . adm_back_link($this->u_action));
+			}
 
+			$this->template->assign_vars(array(
+				'DELETE_CATEGORY_ID'	=> (int) $category_id,
 
+				'S_CATEGORY_DELETE'	=> true,
 
-
-
-
-
-
-
-
-
-
+				'U_DELETE_CATEGORY'	=> $this->u_action . '&amp;action=delete&amp;c=' . (int) $category_id,
+			));
+		}
+	}
 
 	/**
 	* Move a category up/down

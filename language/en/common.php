@@ -52,18 +52,20 @@ $lang = array_merge($lang, array(
 	'BUTTON_NEW_ARTICLE'	=> 'New Article',
 
 	'CATEGORY'			=> 'Category',
+	'CATEGORY_CONFIRM'	=> 'Are you sure you want to %1$s this category?',
 	'CATEGORY_CREATED'	=> 'Category created successfully.',
 	'CATEGORY_DELETED'	=> 'Category successfully deleted.',
 	'CATEGORY_UPDATED'	=> 'Category information updated successfully.',
 	'CREATE_CATEGORY'	=> 'Create new category',
 
-	'DELETE_CATEGORY'	=> 'Delete Category',
-	'DELETED'			=> 'Deleted',
-	'DENIED'			=> 'Denied',
-	'DENY'				=> 'Deny',
-	'DESCRIPTION'		=> 'Description',
-	'DISAPPROVE'		=> 'Disapprove',
-	'DISAPPROVED'		=> 'Disapproved',
+	'DELETE_ALL_ARTICLES'	=> 'Delete articles',
+	'DELETE_CATEGORY'		=> 'Delete Category',
+	'DELETED'				=> 'Deleted',
+	'DENIED'				=> 'Denied',
+	'DENY'					=> 'Deny',
+	'DESCRIPTION'			=> 'Description',
+	'DISAPPROVE'			=> 'Disapprove',
+	'DISAPPROVED'			=> 'Disapproved',
 
 	'EDIT'				=> 'Edit',
 	'EDIT_CATEGORY'		=> 'Edit Category',
@@ -86,6 +88,7 @@ $lang = array_merge($lang, array(
 	'LOG_CATEGORY_UP'		=> '<strong>Moved category</strong> %1$s <strong>above</strong> %2$s',
 
 	'MANAGE_CATEGORIES'	=> 'Manage Categories',
+	'MOVE_ARTICLES_TO'	=> 'Move articles to',
 
 	'NOTIFICATION_ARTICLE_IN_QUEUE'	=> '<strong>Article approval</strong> request: %1$s',
 	'NO_ARTICLE'					=> 'The requested article does not exist.',
