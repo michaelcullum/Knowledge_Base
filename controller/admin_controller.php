@@ -29,6 +29,9 @@ class admin_controller
 	/* @var \phpbb\controller\helper */
 	protected $helper;
 
+	/** @var \phpbb\log\log */
+	protected $log;
+
 	/** @var \phpbb\request\request */
 	protected $request;
 
@@ -72,6 +75,7 @@ class admin_controller
 	* @param \phpbb\config\config                 $config           Config object
 	* @param \phpbb\db\driver\driver_interface    $db               Database object
 	* @param \phpbb\controller\helper             $helper           Helper object
+	* @param \phpbb\log\log                       $log              Log object
 	* @param \phpbb\request\request               $request          Request object
 	* @param \phpbb\template\template             $template         Template object
 	* @param \phpbb\user                          $user             User object
@@ -84,13 +88,14 @@ class admin_controller
 	* @return \tmbackoff\knowledgebase\controller\main_controller
 	* @access public
 	*/
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, Container $phpbb_container, $root_path, $php_ext, $categories_table, $articles_table)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\log\log $log, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, Container $phpbb_container, $root_path, $php_ext, $categories_table, $articles_table)
 	{
 		$this->auth = $auth;
 		$this->cache = $cache;
 		$this->config = $config;
 		$this->db = $db;
 		$this->helper = $helper;
+		$this->log = $log;
 		$this->request = $request;
 		$this->template = $template;
 		$this->user = $user;
@@ -157,7 +162,7 @@ class admin_controller
 			$sql = 'INSERT INTO ' . $this->categories_table . ' ' . $this->db->sql_build_array('INSERT', $category_data);
 			$this->db->sql_query($sql);
 
-			add_log('admin', 'LOG_CATEGORY_ADD', $category_data['category_name']);
+			$this->log->add('admin', $this->user->data['user_id'], $this->user->data['user_ip'], 'LOG_CATEGORY_ADD', time(), array($category_data['category_name']));
 
 			trigger_error($this->user->lang['CATEGORY_CREATED'] . adm_back_link($this->u_action));
 		}
@@ -192,12 +197,13 @@ class admin_controller
 
 		if ($this->request->is_set_post('submit'))
 		{
+			$new_category_name = $this->request->variable('category_name', '', true);
 			$sql = 'UPDATE ' . $this->categories_table . '
-				SET category_name = "' . $this->request->variable('category_name', '', true) . '"
+				SET category_name = "' . $new_category_name . '"
 				WHERE category_id = ' . (int) $category_id;
 			$this->db->sql_query($sql);
 
-			add_log('admin', 'LOG_CATEGORY_EDIT', $row['category_name']);
+			$this->log->add('admin', $this->user->data['user_id'], $this->user->data['user_ip'], 'LOG_CATEGORY_EDIT', time(), array($row['category_name'], $new_category_name));
 
 			trigger_error($this->user->lang['CATEGORY_UPDATED'] . adm_back_link($this->u_action));
 		}
@@ -248,11 +254,13 @@ class admin_controller
 		{
 			if (confirm_box(true))
 			{
+				$category_name = $row['category_name'];
+
 				$sql = 'DELETE FROM ' . $this->categories_table . '
 					WHERE category_id = ' . (int) $category_id;
 				$this->db->sql_query($sql);
 
-				add_log('admin', 'LOG_CATEGORY_DELETE', $row['category_name']);
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->data['user_ip'], 'LOG_CATEGORY_DELETE', time(), array($category_name));
 
 				trigger_error($this->user->lang['CATEGORY_DELETED'] . adm_back_link($this->u_action));
 			}
@@ -268,6 +276,8 @@ class admin_controller
 
 			if ($this->request->is_set_post('submit'))
 			{
+				$category_name = $row['category_name'];
+
 				if ($delete_articles || !$move_to_category)
 				{
 					$sql = 'SELECT article_id
@@ -297,7 +307,7 @@ class admin_controller
 					$this->db->sql_query($sql);
 				}
 
-				add_log('admin', 'LOG_CATEGORY_DELETE', $row['category_name']);
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->data['user_ip'], 'LOG_CATEGORY_DELETE', time(), array($category_name));
 
 				trigger_error($this->user->lang['CATEGORY_DELETED'] . adm_back_link($this->u_action));
 			}
@@ -406,7 +416,7 @@ class admin_controller
 
 		if ($target['category_name'] !== false)
 		{
-			add_log('admin', 'LOG_CATEGORY_' . strtoupper($direction), $category_row['category_name'], $target['category_name']);
+			$this->log->add('admin', $this->user->data['user_id'], $this->user->data['user_ip'], 'LOG_CATEGORY_' . strtoupper($direction), time(), array($category_row['category_name'], $target['category_name']));
 			$this->cache->destroy('sql', $this->categories_table);
 		}
 	}

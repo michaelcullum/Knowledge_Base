@@ -78,12 +78,12 @@ $lang = array_merge($lang, array(
 
 	'KNOWLEDGE_BASE'			=> 'Knowledge Base',
 	'KNOWLEDGE_BASE_EXPLAIN'	=> 'This section contains detailed articles elaborating on some of the common issues users encounter. Articles submitted by members of the community are checked for accuracy. If you do not find the answer to your question here, we recommend looking through the forums as well as using the search feature.',
-	'KNOWLEDGE_BASE_MANAGE'		=> 'Manage Knowledge Base Categories',
+	'KNOWLEDGE_BASE_MANAGE'		=> 'Manage Categories',
 
 	'LINK_TO_ARTICLE'		=> 'Link to this article',
 	'LOG_CATEGORY_ADD'		=> '<strong>Created new category</strong><br />» %s',
 	'LOG_CATEGORY_DELETE'	=> '<strong>Deleted category</strong><br />» %s',
-	'LOG_CATEGORY_EDIT'		=> '<strong>Edited category details</strong><br />» %s',
+	'LOG_CATEGORY_EDIT'		=> '<strong>Edited category name</strong><br />» <strong>from</strong> %1$s <strong>to</strong> %2$s',
 	'LOG_CATEGORY_DOWN'		=> '<strong>Moved category</strong> %1$s <strong>below</strong> %2$s',
 	'LOG_CATEGORY_UP'		=> '<strong>Moved category</strong> %1$s <strong>above</strong> %2$s',
 
@@ -107,15 +107,16 @@ $lang = array_merge($lang, array(
 ));
 
 $lang = array_merge($lang, array(
-	'ACL_U_KB_DELETE'	=> 'Can delete own articles',
-	'ACL_U_KB_EDIT'		=> 'Can edit own articles',
-	'ACL_U_KB_POST'		=> 'Can post new articles',
+	'ACL_U_KB_DELETE'	=> 'Can delete own Knowledge Base articles',
+	'ACL_U_KB_EDIT'		=> 'Can edit Knowledge Base articles',
+	'ACL_U_KB_POST'		=> 'Can post new Knowledge Base articles',
+	'ACL_U_KB_READ'		=> 'Can read articles in the Knowledge Base',
 
-	'ACL_M_KB_APPROVE'		=> 'Can approve articles',
-	'ACL_M_KB_DELETE'		=> 'Can delete articles',
-	'ACL_M_KB_DENY'			=> 'Can deny articles',
-	'ACL_M_KB_DISAPPROVE'	=> 'Can disapprove articles',
-	'ACL_M_KB_EDIT'			=> 'Can edit articles',
+	'ACL_M_KB_APPROVE'		=> 'Can approve Knowledge Base articles',
+	'ACL_M_KB_DELETE'		=> 'Can delete Knowledge Base articles',
+	'ACL_M_KB_DENY'			=> 'Can deny Knowledge Base articles',
+	'ACL_M_KB_DISAPPROVE'	=> 'Can disapprove Knowledge Base articles',
+	'ACL_M_KB_EDIT'			=> 'Can edit Knowledge Base articles',
 
 	'ACL_A_KB_MANAGE'	=> 'Can manage Knowledge Base',
 ));
