@@ -26,6 +26,9 @@ class main_controller
 	/* @var \phpbb\controller\helper */
 	protected $helper;
 
+	/** @var \phpbb\log\log */
+	protected $log;
+
 	/** @var \phpbb\request\request */
 	protected $request;
 
@@ -65,6 +68,7 @@ class main_controller
 	* @param \phpbb\config\config                 $config           Config object
 	* @param \phpbb\db\driver\driver_interface    $db               Database object
 	* @param \phpbb\controller\helper             $helper           Helper object
+	* @param \phpbb\log\log                       $log              Log object
 	* @param \phpbb\request\request               $request          Request object
 	* @param \phpbb\template\template             $template         Template object
 	* @param \phpbb\user                          $user             User object
@@ -77,12 +81,13 @@ class main_controller
 	* @return \tmbackoff\knowledgebase\controller\main_controller
 	* @access public
 	*/
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, Container $phpbb_container, $root_path, $php_ext, $categories_table, $articles_table)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\log\log $log, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, Container $phpbb_container, $root_path, $php_ext, $categories_table, $articles_table)
 	{
 		$this->auth = $auth;
 		$this->config = $config;
 		$this->db = $db;
 		$this->helper = $helper;
+		$this->log = $log;
 		$this->request = $request;
 		$this->template = $template;
 		$this->user = $user;
@@ -289,6 +294,8 @@ class main_controller
 							$sql = 'UPDATE ' . $this->articles_table . ' SET ' . $this->db->sql_build_array('UPDATE', $data) . ' WHERE article_id = ' . (int) $article_id;
 							$this->db->sql_query($sql);
 
+							$this->log->add('mod', $this->user->data['user_id'], $this->user->data['user_ip'], 'LOG_ARTICLE_APPROVED', time(), array($row['article_title']));
+
 							$meta_info = $this->helper->route('knowledgebase_main_controller', array('name' => 'viewarticle', 'a' => (int) $article_id));
 							meta_refresh(3, $meta_info);
 							return $this->helper->error(sprintf($this->user->lang['ARTICLE_STATUS'], strtolower($this->user->lang['APPROVED'])));
@@ -307,9 +314,13 @@ class main_controller
 
 						if (confirm_box(true))
 						{
+							$article_title = $row['article_title'];
+
 							$sql = 'DELETE FROM ' . $this->articles_table . '
 								WHERE article_id = ' . (int) $article_id;
 							$this->db->sql_query($sql);
+
+							$this->log->add('mod', $this->user->data['user_id'], $this->user->data['user_ip'], 'LOG_ARTICLE_DELETED', time(), array($article_title));
 
 							$meta_info = $this->helper->route('knowledgebase_main_controller', array('name' => 'index'));
 							meta_refresh(3, $meta_info);
@@ -336,6 +347,8 @@ class main_controller
 
 							$sql = 'UPDATE ' . $this->articles_table . ' SET ' . $this->db->sql_build_array('UPDATE', $data) . ' WHERE article_id = ' . (int) $article_id;
 							$this->db->sql_query($sql);
+
+							$this->log->add('mod', $this->user->data['user_id'], $this->user->data['user_ip'], 'LOG_ARTICLE_DENIED', time(), array($row['article_title']));
 
 							$meta_info = $this->helper->route('knowledgebase_main_controller', array('name' => 'viewarticle', 'a' => (int) $article_id));
 							meta_refresh(3, $meta_info);
@@ -364,6 +377,7 @@ class main_controller
 							$sql = 'UPDATE ' . $this->articles_table . ' SET ' . $this->db->sql_build_array('UPDATE', $data) . ' WHERE article_id = ' . (int) $article_id;
 							$this->db->sql_query($sql);
 
+							$this->log->add('mod', $this->user->data['user_id'], $this->user->data['user_ip'], 'LOG_ARTICLE_DISAPPROVED', time(), array($row['article_title']));
 							$this->send_notification($article_id, $row['article_title']);
 
 							$meta_info = $this->helper->route('knowledgebase_main_controller', array('name' => 'viewarticle', 'a' => (int) $article_id));
