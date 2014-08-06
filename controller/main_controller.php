@@ -115,6 +115,12 @@ class main_controller
 			return $this->helper->error($this->user->lang('NOT_AUTHORISED'));
 		}
 
+		$navlinks = array();
+		$navlinks[] = array(
+			'FORUM_NAME'	=> $this->user->lang['KNOWLEDGE_BASE'],
+			'U_VIEW_FORUM'	=> $this->helper->route('knowledgebase_main_controller', array('name' => 'index')),
+		);
+
 		switch ($name)
 		{
 			case 'index':
@@ -228,6 +234,14 @@ class main_controller
 					'U_ALL_CATEGORIES'		=> $this->helper->route('knowledgebase_main_controller', array('name' => 'index')),
 					'U_POST_NEW_ARTICLE'	=> ($this->auth->acl_get('u_kb_post')) ? $this->helper->route('knowledgebase_main_controller', array('name' => 'posting', 'mode' => 'post')) : '',
 				));
+
+				foreach ($navlinks as $item)
+				{
+					$this->template->assign_block_vars('navlinks', array(
+						'FORUM_NAME'	=> $item['FORUM_NAME'],
+						'U_VIEW_FORUM'	=> $item['U_VIEW_FORUM'],
+					));
+				}
 
 				return $this->helper->render('index_body.html', $this->user->lang('KNOWLEDGE_BASE'));
 			break;
@@ -389,6 +403,14 @@ class main_controller
 							confirm_box(false, sprintf($this->user->lang['ARTICLE_CONFIRM'], strtolower($this->user->lang['DISAPPROVE'])));
 						}
 					break;
+				}
+
+				foreach ($navlinks as $item)
+				{
+					$this->template->assign_block_vars('navlinks', array(
+						'FORUM_NAME'	=> $item['FORUM_NAME'],
+						'U_VIEW_FORUM'	=> $item['U_VIEW_FORUM'],
+					));
 				}
 
 				return $this->helper->render('mcp_body.html', $this->user->lang('KNOWLEDGE_BASE'));
@@ -631,6 +653,14 @@ class main_controller
 					'U_MORE_SMILIES'	=> append_sid("{$this->root_path}posting.$this->php_ext", 'mode=smilies'),
 				));
 
+				foreach ($navlinks as $item)
+				{
+					$this->template->assign_block_vars('navlinks', array(
+						'FORUM_NAME'	=> $item['FORUM_NAME'],
+						'U_VIEW_FORUM'	=> $item['U_VIEW_FORUM'],
+					));
+				}
+
 				return $this->helper->render('posting_body.html', $this->user->lang('KNOWLEDGE_BASE') . ' - ' . $this->user->lang('POST_ARTICLE'));
 			break;
 
@@ -659,6 +689,19 @@ class main_controller
 				if (!$row)
 				{
 					return $this->helper->error($this->user->lang('NO_ARTICLE'));
+				}
+
+				$navlinks[] = array(
+					'FORUM_NAME'	=> $row['article_title'],
+					'U_VIEW_FORUM'	=> $this->helper->route('knowledgebase_main_controller', array('name' => 'viewarticle', 'a' => $row['article_id'])),
+				);
+
+				foreach ($navlinks as $item)
+				{
+					$this->template->assign_block_vars('navlinks', array(
+						'FORUM_NAME'	=> $item['FORUM_NAME'],
+						'U_VIEW_FORUM'	=> $item['U_VIEW_FORUM'],
+					));
 				}
 
 				$row['bbcode_options'] = (($row['enable_bbcode']) ? OPTION_FLAG_BBCODE : 0) +
